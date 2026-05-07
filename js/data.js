@@ -63,7 +63,7 @@ const SOURCES = {
   },
   dynamic_content: {
     label: "Dynamic Content (CSV)", sub: "Bulk per-recipient via CSV",
-    description: "Upload a CSV in the dashboard and reference its values in Liquid. Add as many columns as you have sections to personalize.",
+    description: "Upload a CSV in the dashboard and reference its values in Liquid.",
     docs: [{ label: "Dynamic Content with CSV", url: "https://documentation.onesignal.com/docs/en/dynamic-content" }],
     supportedChannels: ["email", "push", "sms"],
     notesByChannel: {
@@ -93,9 +93,6 @@ const SOURCES = {
     ],
     supportedChannels: ["email", "push", "sms"],
     notesByChannel: {
-      email: "Custom Event personalization works inside Journeys triggered by the event.",
-      push: "Custom Event personalization works inside Journeys triggered by the event.",
-      sms: "Custom Event personalization works inside Journeys triggered by the event.",
       inapp: "Custom Events are not supported as a personalization source for In-App.",
       live: "Custom Events are not supported as a personalization source for Live Activities.",
     },

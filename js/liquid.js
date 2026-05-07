@@ -131,7 +131,7 @@ ${JSON.stringify({ properties: { tags: tagObj } }, null, 2)}`
         code: buildCsv(s),
       });
       blocks.push({
-        label: `dynamic_content JSON (option B — embed via Create or Update Template API)`,
+        label: `dynamic_content JSON — embed via the Template API`,
         code: JSON.stringify(buildDynamicContentObject(s), null, 2)
       });
       break;

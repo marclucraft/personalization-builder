@@ -30,12 +30,12 @@ function renderSourceOptions() {
 
 function buildExplanation() {
   const msgs = {
-    tags: "Tag keys can be referenced directly as {{ tag_name }}. Each section ships with a default fallback so blank values never render.",
+    tags: "Tag keys are referenced directly as {{ tag_name }}. Each field includes a default fallback so blank values never render.",
     custom_data: "Each section reads a key from the custom_data object on the Create Message API request. Requires a template_id.",
     dynamic_content: state.multiLang
       ? `Looks up each section's row in ${state.csvName}.csv, then picks the column matching ${state.lookupExpr}.`
       : `Looks up the row in ${state.csvName}.csv where the first column matches ${state.lookupExpr} for the recipient, then returns each section's column.`,
-    data_feeds: `data_feed.${state.feedAlias} is the alias on your Data Feed. Each section reads a field off the JSON response.`,
+    data_feeds: `Each field reads from the JSON response your API returns at send time, accessed via the \`${state.feedAlias}\` Data Feed alias.`,
     custom_events: `Each section reads a property off the ${state.eventName} event that triggered the Journey.`,
   };
   return infoBanner(msgs[state.source]);
