@@ -14,7 +14,7 @@ function liquidForSection(s, sec) {
   const fb = fallbackFor(sec.section, sec.fallback);
   switch (s.source) {
     case "tags":
-      return withDefault(`{{ user.tags.${sec.field} }}`, fb);
+      return withDefault(`{{ ${sec.field} }}`, fb);
     case "custom_data":
       return withDefault(`{{ message.custom_data.${sec.field} }}`, fb);
     case "dynamic_content":
@@ -116,8 +116,8 @@ ${JSON.stringify({ properties: { tags: tagObj } }, null, 2)}`
       blocks.push({
         label: "Create Message API request body",
         code: JSON.stringify({
-          app_id: settings.appId || "YOUR_APP_ID",
-          template_id: settings.templateId || "YOUR_TEMPLATE_ID",
+          app_id: "{app_id}",
+          template_id: "{template_id}",
           include_aliases: { external_id: [effectiveExternalId()] },
           target_channel: s.channel === "email" ? "email" : (s.channel === "sms" ? "sms" : "push"),
           custom_data: payload,
@@ -127,32 +127,12 @@ ${JSON.stringify({ properties: { tags: tagObj } }, null, 2)}`
     }
     case "dynamic_content": {
       blocks.push({
-        label: `${s.csvName}.csv (option A — upload via dashboard, or click "Download CSV" below)`,
+        label: `${s.csvName}.csv — upload via dashboard`,
         code: buildCsv(s),
       });
       blocks.push({
         label: `dynamic_content JSON (option B — embed via Create or Update Template API)`,
         code: JSON.stringify(buildDynamicContentObject(s), null, 2)
-      });
-      blocks.push({
-        label: "How the lookup resolves",
-        code: s.multiLang
-          ? `Outer key = ${s.csvName} (the file name / template namespace).
-Middle keys = section names (rows).
-Inner keys = ${s.lookupExpr} values (e.g. language codes).
-
-Each Liquid snippet picks the column matching ${s.lookupExpr}.`
-          : `Outer key = ${s.csvName} (the file name / template namespace).
-Middle keys = ${s.lookupExpr} values (one per recipient).
-Inner keys = the personalized fields you reference in Liquid.
-
-Tip: ${s.lookupExpr} is a built-in user property. Bare keys
-(like \`campaign_id\`) only work when the value is a tag.
-
-Either upload the CSV in the dashboard, or call POST /templates
-(Create Template) or PATCH /templates/{id} (Update Template) with
-the dynamic_content JSON above. Both API calls are sendable from the
-"API & actions" card below.`
       });
       break;
     }
@@ -180,7 +160,7 @@ Personalization > Data Feeds, then activate it.`
       blocks.push({
         label: "Send the custom event (Custom Events API)",
         code:
-          `POST https://api.onesignal.com/apps/${settings.appId || "{app_id}"}/custom_events
+          `POST https://api.onesignal.com/apps/{app_id}/custom_events
 Content-Type: application/json
 
 ${JSON.stringify({

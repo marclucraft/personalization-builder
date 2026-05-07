@@ -16,92 +16,24 @@
         <div class="brand-mark">OS</div>
         <h1>Personalization Builder</h1>
       </div>
-      <p>Pick a channel and a data source, choose the sections you want to personalize, and get the Liquid syntax, the
-        data setup, a live preview, and the API request — ready to send.</p>
+      <p>Pick a channel and a data source to see how personalization works — Liquid syntax, sample data, live preview, and the API request.</p>
     </div>
   </header>
 
   <main>
-    <!-- Settings (collapsed by default) -->
-    <details class="card settings" id="settings-card">
-      <summary>
-        <span class="summary-title">
-          <span>Settings</span>
-          <span
-            style="font-weight:400; text-transform:none; letter-spacing:0; color: var(--os-text-subtle); font-size:12px;">
-            App ID, REST API key, test recipient
-          </span>
-        </span>
-        <span class="summary-status" id="settings-status">Not configured</span>
-      </summary>
-      <div class="settings-body">
-        <div class="settings-grid">
-          <label class="field">
-            <span>App ID</span>
-            <input type="text" id="setting-app-id" placeholder="00000000-0000-0000-0000-000000000000">
-          </label>
-          <label class="field">
-            <span>REST API Key</span>
-            <input type="password" id="setting-api-key" placeholder="os_v2_app_..." autocomplete="off">
-          </label>
-          <label class="field">
-            <span>Test recipient external_id</span>
-            <input type="text" id="setting-external-id" placeholder="user_123">
-          </label>
-          <label class="field">
-            <span>Template ID (for custom_data sends)</span>
-            <input type="text" id="setting-template-id" placeholder="Optional, only needed for some sends">
-          </label>
-        </div>
-        <div class="banner info">
-          <span class="banner-icon">i</span>
-          <span>Stored in your browser's localStorage only. Never sent anywhere except OneSignal's API when you click
-            <em>Send</em>. Browser CORS may block direct sends from this page; if so, use the curl command
-            instead.</span>
-        </div>
-        <div class="actions-row">
-          <button class="action-btn" id="settings-clear-btn">Clear settings</button>
-        </div>
-      </div>
-    </details>
-
-    <!-- Step 1: Channel -->
+    <!-- Channel -->
     <div class="card">
-      <h2><span class="step-num">1</span>Channel</h2>
+      <h2>Channel</h2>
       <p class="source-desc">Where the message will be sent.</p>
       <div class="grid grid-5" id="channel-options"></div>
     </div>
 
-    <!-- Step 2: Data source -->
+    <!-- Data source -->
     <div class="card">
-      <h2><span class="step-num">2</span>Data source</h2>
-      <p class="source-desc">Where the personalized values live. Sources greyed out are not supported on the selected
-        channel.</p>
+      <h2>Data source</h2>
+      <p class="source-desc">Where the personalized values live. Sources greyed out are not supported on the selected channel.</p>
       <div class="grid grid-2" id="source-options"></div>
       <div id="source-banner"></div>
-    </div>
-
-    <!-- Step 3: Source-level setup -->
-    <div class="card">
-      <h2><span class="step-num">3</span>Source-level setup</h2>
-      <p class="source-desc">Settings that apply across all the sections you personalize from this source.</p>
-      <div id="source-config"></div>
-    </div>
-
-    <!-- Step 4: Sections -->
-    <div class="card">
-      <h2><span class="step-num">4</span>Sections to personalize <span class="badge" id="section-count">1</span></h2>
-      <p class="source-desc">Add a row for each part of the message you want to personalize. Every section gets a
-        default fallback so it never renders blank.</p>
-      <div id="sections-list"></div>
-      <button class="add-section-btn" id="add-section-btn">+ Add another section</button>
-    </div>
-
-    <!-- Common scenarios -->
-    <div class="card">
-      <h2>Common scenarios</h2>
-      <p class="source-desc">Quick presets that fill in everything below.</p>
-      <div class="scenario-buttons" id="scenarios"></div>
     </div>
 
     <!-- Output -->
@@ -111,7 +43,6 @@
       <div class="tabs" role="tablist">
         <button class="tab active" data-tab="liquid">Liquid syntax</button>
         <button class="tab" data-tab="setup">Sample data setup</button>
-        <button class="tab" data-tab="preview">Rendered preview</button>
       </div>
       <div class="tab-content active" data-tab="liquid">
         <div id="liquid-output"></div>
@@ -119,17 +50,7 @@
       <div class="tab-content" data-tab="setup">
         <div id="setup-output"></div>
       </div>
-      <div class="tab-content" data-tab="preview">
-        <div id="preview-output"></div>
-      </div>
       <div class="doc-links" id="doc-links"></div>
-    </div>
-
-    <!-- API request & actions -->
-    <div class="card" id="api-card">
-      <h2>API &amp; actions</h2>
-      <h3 id="api-title">Send it from the page or copy the curl command</h3>
-      <div id="api-body"></div>
     </div>
   </main>
 
@@ -140,8 +61,6 @@
   <script src="js/state.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/liquid.js"></script>
-  <script src="js/preview.js"></script>
-  <script src="js/api.js"></script>
   <script src="js/render.js"></script>
   <script src="js/app.js"></script>
 </body>

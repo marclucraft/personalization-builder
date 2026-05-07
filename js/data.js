@@ -111,67 +111,105 @@ const DEFAULT_FALLBACKS = {
   headings: "Update", contents: "Tap to view", event_updates: "—",
 };
 
-const SCENARIOS = [
-  {
-    label: "Reply-to + Subject + Body (Dynamic Content)",
-    apply(state) {
-      state.channel = "email"; state.source = "dynamic_content";
-      state.csvName = "personalisation"; state.lookupExpr = "subscription.external_id"; state.multiLang = false;
-      state.sections = [
-        { id: newSectionId(), section: "reply_to", field: "reply_to", fallback: "support@yourdomain.com", sampleValue: "agent.alice@yourdomain.com" },
-        { id: newSectionId(), section: "subject", field: "subject", fallback: "An update from us", sampleValue: "Welcome, Alice!" },
-        { id: newSectionId(), section: "body", field: "body", fallback: "Hi there, thanks for being a customer.", sampleValue: "Hi Alice, thanks for being a customer." },
-      ];
-    }
+const EXAMPLES = {
+  "email+tags": {
+    sections: [
+      { section: "subject", field: "first_name", fallback: "Hi there", sampleValue: "Alice" },
+      { section: "body",    field: "level",      fallback: "1",        sampleValue: "5" },
+    ],
   },
-  {
-    label: "First name + level (Tags)",
-    apply(state) {
-      state.channel = "email"; state.source = "tags";
-      state.sections = [
-        { id: newSectionId(), section: "subject", field: "first_name", fallback: "Hi there", sampleValue: "Sarah" },
-        { id: newSectionId(), section: "body", field: "level", fallback: "1", sampleValue: "5" },
-      ];
-    }
+  "email+custom_data": {
+    sections: [
+      { section: "subject", field: "order_id", fallback: "Your order", sampleValue: "ORD-9821" },
+      { section: "body",    field: "total",    fallback: "—",           sampleValue: "$42.00" },
+    ],
   },
-  {
-    label: "OTP code (custom_data)",
-    apply(state) {
-      state.channel = "sms"; state.source = "custom_data";
-      state.sections = [
-        { id: newSectionId(), section: "body", field: "otp", fallback: "Your verification code expired. Please request a new one.", sampleValue: "482913" },
-      ];
-    }
+  "email+dynamic_content": {
+    csvName: "personalisation", lookupExpr: "subscription.external_id", multiLang: false,
+    sections: [
+      { section: "reply_to", field: "reply_to", fallback: "support@yourdomain.com",               sampleValue: "agent.alice@yourdomain.com" },
+      { section: "subject",  field: "subject",  fallback: "An update from us",                    sampleValue: "Welcome, Alice!" },
+      { section: "body",     field: "body",     fallback: "Hi there, thanks for being a customer.", sampleValue: "Hi Alice, thanks for being a customer." },
+    ],
   },
-  {
-    label: "Multi-language (subject + body)",
-    apply(state) {
-      state.channel = "email"; state.source = "dynamic_content";
-      state.multiLang = true; state.csvName = "translations"; state.lookupExpr = "user.language";
-      state.sections = [
-        { id: newSectionId(), section: "subject", field: "section_subject", fallback: "An update from us", sampleValue: "Welcome, Alice!" },
-        { id: newSectionId(), section: "body", field: "section_body", fallback: "Thanks for being a customer.", sampleValue: "Hi Alice, thanks for being a customer." },
-      ];
-    }
+  "email+data_feeds": {
+    feedAlias: "rewards",
+    sections: [
+      { section: "subject", field: "status_level", fallback: "Member", sampleValue: "Gold" },
+      { section: "body",    field: "points",        fallback: "0",     sampleValue: "193" },
+    ],
   },
-  {
-    label: "Reward points + status (Data Feed)",
-    apply(state) {
-      state.channel = "email"; state.source = "data_feeds"; state.feedAlias = "rewards";
-      state.sections = [
-        { id: newSectionId(), section: "subject", field: "status_level", fallback: "Member", sampleValue: "Gold" },
-        { id: newSectionId(), section: "body", field: "points", fallback: "0", sampleValue: "193" },
-      ];
-    }
+  "email+custom_events": {
+    eventName: "order_shipped",
+    sections: [
+      { section: "subject", field: "carrier",         fallback: "Your carrier", sampleValue: "UPS" },
+      { section: "body",    field: "tracking_number", fallback: "(pending)",    sampleValue: "1Z999AA10123456784" },
+    ],
   },
-  {
-    label: "Order shipped (Custom Event)",
-    apply(state) {
-      state.channel = "email"; state.source = "custom_events"; state.eventName = "order_shipped";
-      state.sections = [
-        { id: newSectionId(), section: "subject", field: "carrier", fallback: "Your carrier", sampleValue: "UPS" },
-        { id: newSectionId(), section: "body", field: "tracking_number", fallback: "(pending)", sampleValue: "1Z999AA10123456784" },
-      ];
-    }
+  "push+tags": {
+    sections: [
+      { section: "title", field: "first_name", fallback: "Hi there",     sampleValue: "Alice" },
+      { section: "body",  field: "level",      fallback: "Check it out", sampleValue: "5" },
+    ],
   },
-];
+  "push+custom_data": {
+    sections: [
+      { section: "title", field: "title",  fallback: "Order update",   sampleValue: "Your order shipped" },
+      { section: "body",  field: "status", fallback: "Check your app", sampleValue: "Track it now" },
+    ],
+  },
+  "push+dynamic_content": {
+    csvName: "personalisation", lookupExpr: "subscription.external_id", multiLang: false,
+    sections: [
+      { section: "title", field: "title", fallback: "We have an update", sampleValue: "Welcome, Alice!" },
+      { section: "body",  field: "body",  fallback: "Tap to view",        sampleValue: "Hi Alice, thanks for being a customer." },
+    ],
+  },
+  "push+custom_events": {
+    eventName: "order_shipped",
+    sections: [
+      { section: "title", field: "carrier",         fallback: "Your order shipped", sampleValue: "Shipped via UPS" },
+      { section: "body",  field: "tracking_number", fallback: "(pending)",          sampleValue: "1Z999AA10123456784" },
+    ],
+  },
+  "sms+tags": {
+    sections: [
+      { section: "body", field: "first_name", fallback: "Hi there", sampleValue: "Alice" },
+    ],
+  },
+  "sms+custom_data": {
+    sections: [
+      { section: "body", field: "otp", fallback: "Your code expired. Please request a new one.", sampleValue: "482913" },
+    ],
+  },
+  "sms+dynamic_content": {
+    csvName: "personalisation", lookupExpr: "subscription.external_id", multiLang: false,
+    sections: [
+      { section: "body", field: "body", fallback: "Hi there, thanks for being a customer.", sampleValue: "Hi Alice, thanks for being a customer." },
+    ],
+  },
+  "sms+custom_events": {
+    eventName: "order_shipped",
+    sections: [
+      { section: "body", field: "tracking_number", fallback: "Your order is on its way.", sampleValue: "Shipped via UPS. Track: 1Z999AA10123456784" },
+    ],
+  },
+  "inapp+tags": {
+    sections: [
+      { section: "text",   field: "first_name", fallback: "Welcome",         sampleValue: "Alice" },
+      { section: "button", field: "level",      fallback: "Tap to continue", sampleValue: "5" },
+    ],
+  },
+  "live+tags": {
+    sections: [
+      { section: "headings", field: "first_name", fallback: "Update",      sampleValue: "Alice" },
+      { section: "contents", field: "level",      fallback: "Tap to view", sampleValue: "5" },
+    ],
+  },
+  "live+custom_data": {
+    sections: [
+      { section: "headings", field: "title",   fallback: "Order update", sampleValue: "Your order shipped" },
+      { section: "contents", field: "message", fallback: "Tap to view",  sampleValue: "Track: 1Z999AA10123456784" },
+    ],
+  },
+};

@@ -1,33 +1,13 @@
-function renderSettingsUi() {
-  document.getElementById("setting-app-id").value = settings.appId || "";
-  document.getElementById("setting-api-key").value = settings.apiKey || "";
-  document.getElementById("setting-external-id").value = settings.externalId || "";
-  document.getElementById("setting-template-id").value = settings.templateId || "";
-  const status = document.getElementById("settings-status");
-  if (settingsConfigured()) {
-    status.textContent = "✓ Connected";
-    status.classList.add("connected");
-  } else {
-    status.textContent = "Not configured";
-    status.classList.remove("connected");
-  }
-}
-
-function wireSettings() {
-  const bind = (id, key) => {
-    document.getElementById(id).addEventListener("input", e => {
-      settings[key] = e.target.value.trim();
-      saveSettings(); renderSettingsUi(); renderOutput();
-    });
-  };
-  bind("setting-app-id", "appId");
-  bind("setting-api-key", "apiKey");
-  bind("setting-external-id", "externalId");
-  bind("setting-template-id", "templateId");
-  document.getElementById("settings-clear-btn").addEventListener("click", () => {
-    if (!confirm("Clear all settings from this browser?")) return;
-    clearSettings(); renderSettingsUi(); renderOutput();
-  });
+function loadExample() {
+  const key = `${state.channel}+${state.source}`;
+  const ex = EXAMPLES[key];
+  if (!ex) return;
+  state.csvName = ex.csvName || "personalisation";
+  state.lookupExpr = ex.lookupExpr || "subscription.external_id";
+  state.multiLang = ex.multiLang || false;
+  state.feedAlias = ex.feedAlias || "rewards";
+  state.eventName = ex.eventName || "order_shipped";
+  state.sections = ex.sections.map(s => ({ ...s, id: newSectionId() }));
 }
 
 function wireTabs() {
@@ -43,18 +23,11 @@ function wireTabs() {
 
 function renderAll() {
   ensureValid();
+  loadExample();
   renderChannelOptions();
   renderSourceOptions();
-  renderSourceConfig();
-  renderSectionsList();
   renderOutput();
 }
 
-document.getElementById("add-section-btn").addEventListener("click", () => { addSection(); renderAll(); });
-
-loadSettings();
-renderSettingsUi();
-wireSettings();
 wireTabs();
-renderScenarios();
 renderAll();

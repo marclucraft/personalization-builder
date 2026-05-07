@@ -13,10 +13,6 @@ function el(tag, attrs = {}, children = []) {
   return e;
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
-
 function codeBlock({ label, code }) {
   const wrap = el("div", { class: "code-wrapper" });
   if (label) wrap.appendChild(el("div", { class: "code-label" }, label));
@@ -41,10 +37,4 @@ function infoBanner(msg) {
 }
 function warnBanner(msg) {
   return el("div", { class: "banner warning" }, [el("span", { class: "banner-icon" }, "!"), el("span", {}, msg)]);
-}
-function errorBanner(msg) {
-  return el("div", { class: "banner error" }, [el("span", { class: "banner-icon" }, "!"), el("span", {}, msg)]);
-}
-function successBanner(msg) {
-  return el("div", { class: "banner success" }, [el("span", { class: "banner-icon" }, "✓"), el("span", {}, msg)]);
 }
